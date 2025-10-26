@@ -1,0 +1,34 @@
+[package]
+name = "onchain-rpg"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "onchain_rpg"
+
+[features]
+no-entrypoint = []
+no-idl = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+pinocchio = "0.8"
+pinocchio-system = "0.2.3"
+pinocchio-log = "0.4"
+
+[dev-dependencies]
+solana-program-test = "2.1.0"
+solana-sdk = "2.1.0"
+tokio = { version = "1.41", features = ["full"] }
+
+[profile.release]
+overflow-checks = true
+lto = "fat"
+codegen-units = 1
+
+[profile.release.build-override]
+opt-level = 3
+incremental = false
+codegen-units = 1
