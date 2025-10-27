@@ -1,0 +1,19 @@
+{
+  "name": "onchain-rpg-client",
+  "version": "1.0.0",
+  "description": "TypeScript client for On-Chain RPG Solana program",
+  "type": "module",
+  "scripts": {
+    "test": "bun test",
+    "deploy": "bun run tests/deploy.ts",
+    "demo": "bun run tests/demo.ts"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.95.8",
+    "@solana/spl-token": "^0.4.9"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "bun-types": "^1.1.38"
+  }
+}
