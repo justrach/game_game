@@ -11,10 +11,7 @@ export function getKeypair(): Keypair {
   return Keypair.generate();
 }
 
-export async function airdrop(connection: Connection, publicKey: PublicKey, amount: number = 1): Promise<string> {
-  console.log(`Requesting airdrop of ${amount} SOL...`);
-  const signature = await connection.requestAirdrop(publicKey, amount * 1e9);
-  await connection.confirmTransaction(signature);
-  console.log(`Airdrop successful: ${signature}`);
-  return signature;
+export async function checkBalance(connection: Connection, publicKey: PublicKey): Promise<number> {
+  const balance = await connection.getBalance(publicKey);
+  return balance / 1e9; // Convert lamports to SOL
 }

@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "test": "bun test",
-    "deploy": "bun run tests/deploy.ts",
-    "demo": "bun run tests/demo.ts"
+    "setup": "bun run tests/setup-wallet.ts",
+    "demo": "bun run tests/demo.ts",
+    "fund": "echo 'Run: solana transfer $(cat .wallet/test-wallet.json | bun run -e \"console.log(require(\\'@solana/web3.js\\').Keypair.fromSecretKey(new Uint8Array(JSON.parse(require(\\'fs\\').readFileSync(0,\\'utf-8\\')))).publicKey.toBase58())\") 0.2 --url devnet'"
   },
   "dependencies": {
     "@solana/web3.js": "^1.95.8",

@@ -1,7 +1,8 @@
 #!/usr/bin/env bun
-import { Keypair, Transaction, sendAndConfirmTransaction } from '@solana/web3.js';
-import { getConnection, PROGRAM_ID, airdrop } from '../client/connection';
+import { Transaction, sendAndConfirmTransaction } from '@solana/web3.js';
+import { getConnection, PROGRAM_ID, checkBalance } from '../client/connection';
 import { createInvokeInstruction } from '../client/instructions';
+import { getOrCreateWallet } from '../client/wallet';
 
 async function main() {
   console.log('🎮 On-Chain RPG Demo\n');
@@ -20,16 +21,21 @@ async function main() {
   console.log('   Executable:', programInfo.executable);
   console.log('   Data length:', programInfo.data.length, 'bytes\n');
   
-  // Create test wallet
-  const wallet = Keypair.generate();
-  console.log('👛 Generated test wallet:', wallet.publicKey.toBase58());
+  // Load or create wallet
+  const wallet = getOrCreateWallet();
   
-  // Airdrop SOL
-  console.log('💰 Requesting airdrop...');
-  await airdrop(connection, wallet.publicKey, 1);
+  // Check balance
+  console.log('\n💰 Checking balance...');
+  const balance = await checkBalance(connection, wallet.publicKey);
+  console.log('   Balance:', balance, 'SOL');
   
-  const balance = await connection.getBalance(wallet.publicKey);
-  console.log('   Balance:', balance / 1e9, 'SOL\n');
+  if (balance < 0.01) {
+    console.log('\n❌ Insufficient balance! Please send SOL to:', wallet.publicKey.toBase58());
+    console.log('   Run: solana transfer', wallet.publicKey.toBase58(), '0.2 --url devnet');
+    process.exit(1);
+  }
+  
+  console.log('   ✅ Sufficient balance\n');
   
   // Invoke program
   console.log('🎯 Invoking program...');
